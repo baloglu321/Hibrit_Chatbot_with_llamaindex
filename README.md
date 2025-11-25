@@ -39,15 +39,13 @@ The system requires specific URLs and API keys. You must update these variables 
 | `OLLAMA_MODEL_ID` | `app.py`, `agent.py` | `"gemma3:27b"` | The name of the model to use. |
 | `WEATHER_API` | `agent.py` | `"your-weather-api-key"` | API key for the weather tool (e.g., Weatherstack). |
 
-##🚀 How to Run
+## 🚀 How to Run
 Start the Gradio interface by running the main application file:
 
 ```bash
   python app.py
 ```
 The application will launch on a local URL (e.g., http://127.0.0.1:7860).
-
-##🛑 Troubleshooting Common Issues
 
 ## 🛑 Troubleshooting Common Issues
 
