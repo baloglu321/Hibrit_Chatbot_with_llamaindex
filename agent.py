@@ -124,7 +124,6 @@ transcriber_tool = FunctionTool.from_defaults(
 
 
 def download_audio_from_youtube(url, output_path="audio.mp3"):
-
     subprocess.run(
         [
             "yt-dlp",

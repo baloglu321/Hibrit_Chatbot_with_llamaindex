@@ -12,7 +12,6 @@ nest_asyncio.apply()
 
 
 class BasicAgent:
-
     def __init__(self):
         print("BasicAgent initialized.")
         self.agent = build_agent()

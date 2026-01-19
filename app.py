@@ -14,7 +14,6 @@ OLLAMA_MODEL_ID = "gemma3:27b"
 
 
 class BasicAgent:
-
     def __init__(self):
         print("BasicAgent initialized.")
         self.agent = build_agent()
@@ -55,7 +54,6 @@ def basic_response(message: str, history: list) -> str:
 
         # 2. Kontrol: Yeni/Karmaşık Format (Dict/Gradio İç Formatı)
         elif isinstance(item, dict) and "role" in item and "content" in item:
-
             continue  # Karmaşık formatı atla, sadece basit tuple çiftlerini işle.
 
         if user_msg and assistant_msg:
