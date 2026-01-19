@@ -5,47 +5,73 @@ A sophisticated hybrid AI system that intelligently routes user queries between 
 ## 📊 Architecture
 
 ```mermaid
-%%{init: {'theme':'dark', 'themeVariables': {'primaryColor':'#1f2937','primaryTextColor':'#fff','primaryBorderColor':'#4b5563','lineColor':'#6b7280','secondaryColor':'#374151','tertiaryColor':'#1f2937','textColor':'#fff','fontSize':'14px'}}}%%
-graph TB
-    User["👤 User"]
-    Gradio["🖥️ Gradio Interface"]
-    Router["🧭 Query Router<br/>(LLM-based Classifier)"]
-    BasicModule["💬 Basic Chat Module"]
-    AgentModule["🤖 ReAct Agent Module"]
-    Memory["🧠 Chat Memory Buffer<br/>(40k tokens)"]
+graph LR
+    subgraph UI["🖥️ User Interface"]
+        Web[Gradio Web UI]
+    end
+
+    subgraph Core["🤖 Hybrid Core"]
+        Router[Query Router<br/>LLM Classifier]
+        Basic[Basic Chat<br/>Module]
+        Agent[ReAct Agent<br/>Module]
+        Memory[Memory Buffer<br/>40k tokens]
+    end
+
+    subgraph LLM["🦙 Language Model"]
+        Ollama[Ollama<br/>Gemma 3 27B]
+    end
+
+    subgraph Tools["🛠️ Agent Tools"]
+        Search[Web & Academic<br/>DuckDuckGo, Wiki, Arxiv]
+        Math[Mathematics<br/>Add, Sub, Mul, Div]
+        Media[Media Processing<br/>YouTube, Whisper]
+        Vision[Image Analysis<br/>Multimodal Caption]
+        Files[File Handler<br/>Excel, JSON]
+        Weather[Weather API<br/>Weatherstack]
+    end
+
+    subgraph External["☁️ External Services"]
+        OllamaServer[Ollama Server<br/>via Cloudflare]
+        APIs[External APIs<br/>Weatherstack]
+    end
+
+    Web -->|User Query| Router
+    Router -->|BASIC| Basic
+    Router -->|AGENT| Agent
     
-    User -->|"Query"| Gradio
-    Gradio -->|"Analyze Query"| Router
-    Router -->|"BASIC<br/>(Simple Chat)"| BasicModule
-    Router -->|"AGENT<br/>(Complex Task)"| AgentModule
+    Basic -->|Simple Chat| Ollama
+    Agent -->|Reasoning| Ollama
+    Agent <-->|Context| Memory
     
-    BasicModule -->|"Direct Response"| OllamaLLM["🦙 Ollama LLM<br/>(Gemma 3 27B)"]
-    AgentModule --> Memory
-    AgentModule --> OllamaLLM
-    AgentModule --> ToolHub["🛠️ Tool Hub"]
+    Agent -->|Select Tool| Search
+    Agent -->|Select Tool| Math
+    Agent -->|Select Tool| Media
+    Agent -->|Select Tool| Vision
+    Agent -->|Select Tool| Files
+    Agent -->|Select Tool| Weather
     
-    ToolHub --> WebTools["🌐 Web Search<br/>• DuckDuckGo<br/>• Wikipedia<br/>• Arxiv"]
-    ToolHub --> DataTools["📊 Data Processing<br/>• Math Operations<br/>• File Downloads<br/>• Excel/JSON Parser"]
-    ToolHub --> MediaTools["🎬 Media Processing<br/>• YouTube Downloader<br/>• Audio Transcriber<br/>• Image Captioner"]
-    ToolHub --> APITools["🌤️ External APIs<br/>• Weather API<br/>(Weatherstack)"]
+    Ollama <-->|API Call| OllamaServer
+    Vision -.->|Multimodal| OllamaServer
+    Weather -->|Request| APIs
+    Files -.->|Download| APIs
     
-    OllamaLLM -->|"Response"| Gradio
-    ToolHub -->|"Tool Results"| AgentModule
-    AgentModule -->|"Final Answer"| Gradio
-    Gradio -->|"Display"| User
-    
-    style User fill:#4f46e5,stroke:#6366f1,color:#fff
-    style Gradio fill:#059669,stroke:#10b981,color:#fff
-    style Router fill:#dc2626,stroke:#ef4444,color:#fff
-    style BasicModule fill:#0891b2,stroke:#06b6d4,color:#fff
-    style AgentModule fill:#7c3aed,stroke:#8b5cf6,color:#fff
-    style Memory fill:#db2777,stroke:#ec4899,color:#fff
-    style OllamaLLM fill:#ea580c,stroke:#f97316,color:#fff
-    style ToolHub fill:#65a30d,stroke:#84cc16,color:#fff
-    style WebTools fill:#0284c7,stroke:#0ea5e9,color:#fff
-    style DataTools fill:#0d9488,stroke:#14b8a6,color:#fff
-    style MediaTools fill:#6366f1,stroke:#818cf8,color:#fff
-    style APITools fill:#c026d3,stroke:#d946ef,color:#fff
+    Basic -->|Response| Web
+    Agent -->|Response| Web
+
+    style Router fill:#FF9800,stroke:#E65100,stroke-width:3px,color:#fff
+    style Basic fill:#00BCD4,stroke:#0097A7,stroke-width:3px,color:#fff
+    style Agent fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    style Ollama fill:#2196F3,stroke:#1565C0,stroke-width:3px,color:#fff
+    style Memory fill:#E91E63,stroke:#C2185B,stroke-width:3px,color:#fff
+    style Web fill:#9C27B0,stroke:#6A1B9A,stroke-width:3px,color:#fff
+    style OllamaServer fill:#673AB7,stroke:#4527A0,stroke-width:3px,color:#fff
+    style Search fill:#607D8B,stroke:#37474F,stroke-width:2px,color:#fff
+    style Math fill:#607D8B,stroke:#37474F,stroke-width:2px,color:#fff
+    style Media fill:#607D8B,stroke:#37474F,stroke-width:2px,color:#fff
+    style Vision fill:#607D8B,stroke:#37474F,stroke-width:2px,color:#fff
+    style Files fill:#607D8B,stroke:#37474F,stroke-width:2px,color:#fff
+    style Weather fill:#607D8B,stroke:#37474F,stroke-width:2px,color:#fff
+    style APIs fill:#795548,stroke:#5D4037,stroke-width:2px,color:#fff
 ```
 
 ## ✨ Key Features
